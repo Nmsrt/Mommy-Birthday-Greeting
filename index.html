@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Happy Birthday, Mommy</title>
+  <meta name="description" content="A little birthday card made just for you, Mommy. Tap to open 💛" />
+  <meta name="theme-color" content="#F6EADB" />
+  <meta name="color-scheme" content="light" />
+
+  <!-- Link preview (Messenger / Viber / iMessage). These must stay in this
+       file because link previewers don't run JavaScript. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Happy Birthday, Mommy 🎂" />
+  <meta property="og:description" content="You've got mail! Tap to open your birthday card 💌" />
+  <!-- Optional preview image: must be a FULL url after you deploy, e.g.
+  <meta property="og:image" content="https://your-site.netlify.app/photos/og-cover.jpg" />
+  -->
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- If opened as ".../folder" (no trailing slash), relative files like
+       styles.css resolve one folder too high. Add the slash so they load. -->
+  <script>
+    (function () {
+      var p = location.pathname;
+      if (location.protocol !== "file:" && !/\/$/.test(p) && !/\.[a-z0-9]+$/i.test(p)) {
+        location.replace(p + "/" + location.search + location.hash);
+      }
+    })();
+  </script>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="locked">
+  <!-- Envelope cover: tap to open -->
+  <div class="cover" id="cover">
+    <button class="envelope" id="envelope" type="button" aria-label="Open your birthday card">
+      <span class="env-back"></span>
+      <span class="env-card">
+        <span class="env-card-text" id="envCardText">Happy Birthday!</span>
+      </span>
+      <span class="env-front"></span>
+      <span class="env-flap"></span>
+      <span class="env-seal" aria-hidden="true">♥</span>
+    </button>
+    <p class="cover-to" id="coverTo"></p>
+    <p class="cover-hint" id="coverHint"></p>
+  </div>
+
+  <main class="deck" id="page"></main>
+
+  <nav class="nav" id="nav" hidden>
+    <button class="nav-prev" id="prevBtn" type="button" aria-label="Previous page">←</button>
+    <div class="pager" id="dots" aria-hidden="true"></div>
+    <button class="nav-next" id="nextBtn" type="button"><span>Next</span> <b aria-hidden="true">→</b></button>
+  </nav>
+
+  <button class="music-btn" id="musicBtn" type="button" aria-label="Play music" aria-pressed="false" hidden>
+    <span aria-hidden="true">♪</span>
+  </button>
+
+  <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+
+  <audio id="bgm" loop preload="none"></audio>
+
+  <noscript>
+    <p style="padding:24px;font-family:sans-serif">Please turn on JavaScript to open your birthday card 🎂</p>
+  </noscript>
+
+  <script src="content.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Setup check: if a file failed to load, show which URL was tried. -->
+  <script>
+    window.addEventListener("load", function () {
+      var problems = [];
+      var cssOk = getComputedStyle(document.documentElement).getPropertyValue("--css-ok").trim() === "1";
+      if (!cssOk) problems.push("styles.css");
+      if (!window.BDAY) problems.push("content.js");
+      if (!document.querySelector(".card")) problems.push("app.js");
+      if (!problems.length) return;
+      var box = document.createElement("div");
+      box.setAttribute("style", "position:fixed;z-index:9999;left:12px;right:12px;top:12px;padding:16px;border-radius:12px;background:#fff;color:#111;font:14px/1.5 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.4);word-break:break-all");
+      box.innerHTML = "<b>Setup problem:</b> these files didn't load:<br>" +
+        problems.map(function (f) {
+          var u = new URL(f, location.href).href;
+          return "• <b>" + f + "</b> → tried <a href='" + u + "'>" + u + "</a>";
+        }).join("<br>") +
+        "<br><br>Make sure they sit in the <b>same folder</b> as index.html, with exactly that lowercase name.";
+      document.body.appendChild(box);
+    });
+  </script>
+</body>
+</html>
